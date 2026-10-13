@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @font-face {
+      font-family: "Figtree";
+      src: url("fonts/Figtree-Variable.ttf") format("truetype");
+      font-weight: 400 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Fraunces";
+      src: url("fonts/Fraunces-Variable.ttf") format("truetype");
+      font-weight: 500 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #1a2f2a;
+      --ink-soft: #4a635c;
+      --muted: #7a9189;
+      --line: #d8e4df;
+      --surface: #ffffff;
+      --bg: #eef4f1;
+      --bg-deep: #e4ede8;
+      --brand: #1f6b5a;
+      --brand-deep: #165347;
+      --brand-soft: #d8efe7;
+      --brand-mist: #edf7f3;
+      --warn: #9a6b2f;
+      --warn-bg: #f7efd9;
+      --ad: #8a5a1a;
+      --ad-bg: #f6ebd4;
+      --ok: #1f6b5a;
+      --ok-bg: #d8efe7;
+      --radius: 14px;
+      --shadow: 0 1px 0 rgba(26, 47, 42, 0.04), 0 8px 24px rgba(26, 47, 42, 0.06);
+      --font: "Figtree", "Segoe UI", sans-serif;
+      --display: "Fraunces", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      width: 320px;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(120% 80% at 0% 0%, #f7fbf9 0%, transparent 55%),
+        radial-gradient(90% 70% at 100% 0%, #e8f3ee 0%, transparent 50%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .shell {
+      padding: 14px 14px 16px;
+    }
+
+    /* —— Header (identidade) —— */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 10px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 55%, #2a8571 100%);
+      color: #f4faf8;
+      box-shadow: var(--shadow);
+      animation: rise 420ms ease-out;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .mark {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      background: none;
+      display: grid;
+      place-items: center;
+    }
+
+    .mark svg,
+    .mark img {
+      width: 48px;
+      height: 48px;
+      display: block;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 600;
+      font-variation-settings: "SOFT" 50, "opsz" 36;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.78;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .power-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .power-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      opacity: 0.88;
+      white-space: nowrap;
+    }
+
+    .power {
+      appearance: none;
+      width: 44px;
+      height: 26px;
+      margin: 0;
+      padding: 3px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.22);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background 180ms ease;
+    }
+
+    .power:focus-visible {
+      outline: 2px solid #f4faf8;
+      outline-offset: 2px;
+    }
+
+    .power-knob {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #f4faf8;
+      box-shadow: 0 1px 3px rgba(16, 40, 34, 0.28);
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .power[aria-checked="true"] {
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .power[aria-checked="true"] .power-knob {
+      transform: translateX(18px);
+      background: var(--brand-deep);
+    }
+
+    /* —— Status —— */
+    .status {
+      margin: 12px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 12.5px;
+      font-weight: 500;
+      box-shadow: 0 1px 0 rgba(26, 47, 42, 0.03);
+      animation: rise 480ms ease-out;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+      transition: background 220ms ease, box-shadow 220ms ease;
+    }
+
+    .status.active {
+      background: var(--ok-bg);
+      border-color: #c5e4d8;
+      color: var(--ok);
+    }
+    .status.active .status-dot {
+      background: var(--ok);
+      box-shadow: 0 0 0 3px rgba(31, 107, 90, 0.18);
+    }
+
+    .status.ad {
+      background: var(--ad-bg);
+      border-color: #ead7ad;
+      color: var(--ad);
+    }
+    .status.ad .status-dot {
+      background: var(--ad);
+      box-shadow: 0 0 0 3px rgba(138, 90, 26, 0.16);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    .status.warn {
+      background: var(--warn-bg);
+      border-color: #ead9b0;
+      color: var(--warn);
+    }
+    .status.warn .status-dot {
+      background: var(--warn);
+    }
+
+    .status.off .status-dot {
+      background: var(--muted);
+    }
+
+    body.is-off .section {
+      opacity: 0.5;
+    }
+
+    /* —— Section —— */
+    .section {
+      margin-top: 16px;
+      animation: rise 540ms ease-out;
+    }
+
+    .section-label {
+      margin: 0 0 8px 2px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .modes {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mode {
+      appearance: none;
+      width: 100%;
+      margin: 0;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: inherit;
+      font: inherit;
+      box-shadow: 0 1px 0 rgba(26, 47, 42, 0.03);
+      transition:
+        border-color 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+    }
+
+    .mode:hover {
+      border-color: #b9d0c6;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .mode:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+
+    .mode[aria-checked="true"] {
+      border-color: #8fc4b2;
+      background: linear-gradient(180deg, #ffffff 0%, var(--brand-mist) 100%);
+      box-shadow: 0 0 0 1px rgba(31, 107, 90, 0.08), var(--shadow);
+    }
+
+    .mode-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--brand-soft);
+      color: var(--brand-deep);
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .mode[aria-checked="true"] .mode-icon {
+      background: var(--brand);
+      color: #f4faf8;
+    }
+
+    .mode-icon svg {
+      width: 40px;
+      height: 40px;
+      display: block;
+    }
+
+    .mode-copy {
+      min-width: 0;
+    }
+
+    .mode-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .mode-desc {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .mode-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #c5d6cf;
+      display: grid;
+      place-items: center;
+      transition: border-color 180ms ease, background 180ms ease;
+    }
+
+    .mode-check svg {
+      width: 10px;
+      height: 10px;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .mode[aria-checked="true"] .mode-check {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .mode[aria-checked="true"] .mode-check svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* —— Volume —— */
+    .level-panel {
+      margin-top: 8px;
+      padding: 12px 12px 14px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 1px 0 rgba(26, 47, 42, 0.03);
+      overflow: hidden;
+      max-height: 96px;
+      opacity: 1;
+      transition:
+        max-height 280ms ease,
+        opacity 220ms ease,
+        margin 280ms ease,
+        padding 280ms ease,
+        border-width 280ms ease;
+    }
+
+    .level-panel.disabled {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-width: 0;
+      pointer-events: none;
+    }
+
+    .level-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .level-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    #levelValue {
+      font-size: 13px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--brand-deep);
+      letter-spacing: -0.02em;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slider-edge {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      min-width: 22px;
+    }
+
+    .slider-edge:last-child {
+      text-align: right;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #b7d9cd, var(--brand));
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--brand);
+      box-shadow: 0 1px 4px rgba(26, 47, 42, 0.18);
+      cursor: pointer;
+      transition: transform 140ms ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.08);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--brand);
+      box-shadow: 0 1px 4px rgba(26, 47, 42, 0.18);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #b7d9cd, var(--brand));
+    }
+
+    /* —— Footer —— */
+    .hint {
+      margin: 14px 2px 0;
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: var(--muted);
+      animation: rise 600ms ease-out;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(138, 90, 26, 0.14); }
+      50% { box-shadow: 0 0 0 5px rgba(138, 90, 26, 0.08); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="header">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <img src="../icons/icon128-white.png" width="48" height="48" alt="" />
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Serena</span>
+          <span class="brand-tag">conforto auditivo</span>
+        </div>
+      </div>
+      <div class="power-wrap">
+        <span id="powerLabel" class="power-label">Ligada</span>
+        <button type="button" id="power" class="power" role="switch" aria-checked="true" aria-labelledby="powerLabel">
+          <span class="power-knob" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
+
+    <p id="status" class="status" role="status">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="statusText">Verificando…</span>
+    </p>
+
+    <section class="section" aria-labelledby="modesLabel">
+      <h2 id="modesLabel" class="section-label">Durante o anúncio</h2>
+
+      <div class="modes" role="radiogroup" aria-labelledby="modesLabel">
+        <button type="button" class="mode" role="radio" aria-checked="false" data-mode="mute">
+          <span class="mode-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 10v4h3.2L13 18V6L8.2 10H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M16.2 9.2l4.6 5.6M20.8 9.2l-4.6 5.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="mode-copy">
+            <span class="mode-title">Mudo total</span>
+            <span class="mode-desc">Silencia o player enquanto o anúncio toca</span>
+          </span>
+          <span class="mode-check" aria-hidden="true">
+            <svg viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 6.2l2.4 2.4 4.6-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+
+        <button type="button" class="mode" role="radio" aria-checked="false" data-mode="reduce">
+          <span class="mode-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 10v4h3.2L13 18V6L8.2 10H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M16 10.5a3.2 3.2 0 010 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M18.2 8.5a5.8 5.8 0 010 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity="0.55"/>
+            </svg>
+          </span>
+          <span class="mode-copy">
+            <span class="mode-title">Volume reduzido</span>
+            <span class="mode-desc">Mantém o som baixo, sem cortar por completo</span>
+          </span>
+          <span class="mode-check" aria-hidden="true">
+            <svg viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 6.2l2.4 2.4 4.6-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <div id="levelRow" class="level-panel disabled" aria-hidden="true">
+        <div class="level-head">
+          <span class="level-label">Nível durante o anúncio</span>
+          <span id="levelValue">15%</span>
+        </div>
+        <div class="slider-row">
+          <span class="slider-edge">0%</span>
+          <input type="range" id="level" min="0" max="100" step="5" aria-label="Volume durante o anúncio" />
+          <span class="slider-edge">100%</span>
+        </div>
+      </div>
+    </section>
+
+    <p id="hint" class="hint">O volume original volta sozinho quando o anúncio termina.</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
