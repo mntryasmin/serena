@@ -29,7 +29,11 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
+      "matches": [
+        "*://www.youtube.com/*",
+        "*://m.youtube.com/*",
+        "*://youtube.com/*"
+      ],
       "js": ["content/adapters/youtube.js", "content/main.js"],
       "run_at": "document_idle",
       "all_frames": false
